@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 	process.WalkInterfaces();
 
 	LOG(SUCCES, "Finished interface walking!");
-	LOG(INFO, "Written %d interfaces to %s!", process.GetWrittenInterfaceCount(), std::string(processName + "_log.txt").data());
+	LOG(INFO, "Written %d interfaces to %s!", process.GetWrittenInterfaceCount(), std::string("logs/" + processName + "_log.txt").data());
 
 	process.CloseLogFile();
 

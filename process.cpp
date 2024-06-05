@@ -1,6 +1,7 @@
 #include "process.hpp"
 #include <TlHelp32.h>
 #include "log.hpp"
+#include <filesystem>
 
 #ifdef x86
 #define OPTIONAL_HEADER IMAGE_OPTIONAL_HEADER32
@@ -30,7 +31,10 @@ constexpr int RvaSize = sizeof(DWORD);
 Process::Process(const char* procName)
 	: name(procName)
 {
-	strcpy_s(fileName.data(), fileName.size(), procName);
+	std::filesystem::create_directory("logs");
+
+	strcpy_s(fileName.data(), fileName.size(), "logs//");
+	strcat_s(fileName.data(), fileName.size(), procName);
 	strcat_s(fileName.data(), fileName.size(), "_log.txt");
 
 	dumpFile.open(fileName.data());
