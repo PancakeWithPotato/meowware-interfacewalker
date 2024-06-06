@@ -1,0 +1,464 @@
+MODULE: vstdlib.dll
+    -VProcessUtils001
+    -VEngineCvar004
+
+
+MODULE: stdshader_dx9.dll
+    -ShaderDLL004
+
+
+MODULE: engine.dll
+    -VEngineVGui002
+    -VSERVERENGINETOOLS001
+    -VCLIENTENGINETOOLS001
+    -VTOOLFRAMEWORKVERSION002
+    -VENGINETOOLFRAMEWORK003
+    -VENGINETOOL003
+    -XboxSystemInterface001
+    -VProfExport001
+    -VoiceServer002
+    -VENGINE_GAMEUIFUNCS_VERSION005
+    -VENGINE_HLDS_API_VERSION002
+    -VENGINE_LAUNCHER_API_VERSION004
+    -StaticPropMgrServer002
+    -StaticPropMgrClient004
+    -SpatialPartition001
+    -ReplayDemoPlayer001
+    -VEngineRandom001
+    -VEngineServerStringTable001
+    -VEngineClientStringTable001
+    -VModelInfoClient006
+    -VModelInfoServer004
+    -VModelInfoServer003
+    -VENGINE_MATCHMAKING_VERSION001
+    -GAMEEVENTSMANAGER001
+    -GAMEEVENTSMANAGER002
+    -EngineTraceClient003
+    -EngineTraceServer003
+    -EngineClientReplay001
+    -EngineReplay001
+    -DownloadSystem001
+    -VCvarQuery001
+    -VEngineServer023
+    -VEngineServer022
+    -VEngineServer021
+    -ServerUploadGameStats001
+    -GameServerData001
+    -ISERVERPLUGINHELPERS001
+    -VEngineRenderView014
+    -VEngineShadowMgr002
+    -VEngineEffects001
+    -VEngineModel016
+    -VPhysicsDebugOverlay001
+    -VDebugOverlay003
+    -VEngineClient013
+    -VEngineClient014
+    -IEngineSoundServer003
+    -IEngineSoundClient003
+
+
+MODULE: server.dll
+    -VSERVERCHOREOTOOLS001
+    -VSERVERTOOLS003
+    -VSERVERTOOLS002
+    -VSERVERTOOLS001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -HLTVDirector001
+    -ServerGameTags001
+    -GameMovement001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -PluginHelpersCheck001
+    -BotManager001
+    -PlayerInfoManager002
+    -PlayerInfoManager001
+    -ServerGameTags001
+    -ServerGameTags001
+    -ServerGameTags001
+    -VServerDllSharedAppSystems001
+    -ServerGameClients005
+    -ServerGameClients004
+    -ServerGameClients003
+    -ServerGameEnts001
+    -ServerGameDLL012
+    -ServerGameTags001
+    -IEffects001
+    -ServerGameTags001
+    -ServerReplay001
+
+
+MODULE: video_services.dll
+    -IVideoServices002
+
+
+MODULE: launcher.dll
+    -IVideoServices002
+    -ServerReplay001
+
+
+MODULE: filesystem_stdio.dll
+    -QueuedLoaderVersion004
+    -VBaseFileSystem011
+    -VFileSystem022
+
+
+MODULE: video_source2wrapper.dll
+    -IVideoSubSystem002
+
+
+MODULE: vguimatsurface.dll
+    -VGUI_Surface030
+
+
+MODULE: inputsystem.dll
+    -InputSystemVersion001
+
+
+MODULE: materialsystem.dll
+    -ShaderDLL004
+    -ShaderSystem002
+    -VMaterialSystemStub001
+    -replace_proxy_IMaterialProxy003
+    -VEngineCvar004
+    -MaterialSystemHardwareConfig012
+    -VMaterialSystemConfig002
+    -VMaterialSystem081
+    -COLORCORRECTION_VERSION_1
+
+
+MODULE: datacache.dll
+    -VStudioDataCache005
+    -MDLCache004
+    -VDataCache003
+
+
+MODULE: shaderapidx9.dll
+    -ShaderShadow010
+    -ShaderDeviceMgr001
+    -DebugTextureInfo001
+    -ShaderDevice001
+    -ShaderApi030
+    -MaterialSystemHardwareConfig012
+    -VBAllocTracker001
+
+
+MODULE: studiorender.dll
+    -VStudioRender025
+
+
+MODULE: vphysics.dll
+    -VPhysicsSurfaceProps001
+    -VPhysicsCollision007
+    -VPhysics031
+
+
+MODULE: vgui2.dll
+    -VGUI_Panel009
+    -VGUI_ivgui008
+    -VGUI_System010
+    -VGUI_Surface030
+    -VGUI_Scheme010
+    -VGUI_Localize005
+    -VGUI_InputInternal001
+    -VGUI_Input005
+
+
+MODULE: vscript.dll
+    -VScriptManager010
+
+
+MODULE: video64.dll
+    -VScriptManager010
+    -VGUI_Input005
+
+
+MODULE: steamclient64.dll
+    -IVALIDATE001
+    -CLIENTENGINE_INTERFACE_VERSION005
+    -SteamClient021
+    -SteamClient020
+    -SteamClient019
+    -SteamClient018
+    -SteamClient017
+    -SteamClient016
+    -SteamClient015
+    -SteamClient014
+    -SteamClient013
+    -SteamClient012
+    -SteamClient011
+    -SteamClient010
+    -SteamClient009
+    -SteamClient008
+    -SteamClient007
+    -SteamClient006
+    -p2pvoice002
+    -p2pvoicesingleton002
+
+
+MODULE: vaudio_minimp3.dll
+    -VAudio002
+
+
+MODULE: vstdlib_s64.dll
+    -IVALIDATE001
+    -VEngineCvar002
+
+
+MODULE: crashhandler64.dll
+    -VEngineCvar002
+    -VEngineCvar002
+
+
+MODULE: stdshader_dbg.dll
+    -ShaderDLL004
+
+
+MODULE: stdshader_dx6.dll
+    -ShaderDLL004
+
+
+MODULE: stdshader_dx7.dll
+    -ShaderDLL004
+
+
+MODULE: stdshader_dx8.dll
+    -ShaderDLL004
+
+
+MODULE: unicode.dll
+    -VENGINEUNICODE001
+
+
+MODULE: scenefilecache.dll
+    -SceneFileCache002
+
+
+MODULE: client.dll
+    -VCLIENTTOOLS001
+    -weapon_invis_IMaterialProxy003
+    -SniperRifleCharge_IMaterialProxy003
+    -StickybombGlowColor_IMaterialProxy003
+    -invis_IMaterialProxy003
+    -vm_invis_IMaterialProxy003
+    -ClientRenderTargets001
+    -VClientPrediction001
+    -GameMovement001
+    -TeamTexture_IMaterialProxy003
+    -WeaponSkin_IMaterialProxy003
+    -StatTrakIcon_IMaterialProxy003
+    -StatTrakDigit_IMaterialProxy003
+    -StatTrakIllum_IMaterialProxy003
+    -AnimatedWeaponSheen_IMaterialProxy003
+    -WheatlyEyeGlow_IMaterialProxy003
+    -ShieldFalloff_IMaterialProxy003
+    -BuildingRescueLevel_IMaterialProxy003
+    -BenefactorLevel_IMaterialProxy003
+    -HeartbeatScale_IMaterialProxy003
+    -CommunityWeapon_IMaterialProxy003
+    -ModelGlowColor_IMaterialProxy003
+    -YellowLevel_IMaterialProxy003
+    -BurnLevel_IMaterialProxy003
+    -InvulnLevel_IMaterialProxy003
+    -spy_invis_IMaterialProxy003
+    -building_invis_IMaterialProxy003
+    -ObjectPower_IMaterialProxy003
+    -IReplayFactory001
+    -CustomSteamImageOnModel_IMaterialProxy003
+    -ItemTintColor_IMaterialProxy003
+    -WorldDims_IMaterialProxy003
+    -WaterLOD_IMaterialProxy003
+    -MotionBlur_IMaterialProxy003
+    -engine_post_IMaterialProxy003
+    -VCENTERPRINT002
+    -ToggleTexture_IMaterialProxy003
+    -CurrentTime_IMaterialProxy003
+    -TextureScroll_IMaterialProxy003
+    -Pupil_IMaterialProxy003
+    -PlayerLogo_IMaterialProxy003
+    -EntityRandom_IMaterialProxy003
+    -EntitySpeed_IMaterialProxy003
+    -PlayerPosition_IMaterialProxy003
+    -PlayerSpeed_IMaterialProxy003
+    -PlayerView_IMaterialProxy003
+    -PlayerTeamMatch_IMaterialProxy003
+    -PlayerProximity_IMaterialProxy003
+    -Health_IMaterialProxy003
+    -VParticleSystemQuery001
+    -ParticleSphereProxy_IMaterialProxy003
+    -MatrixRotate_IMaterialProxy003
+    -TextureTransform_IMaterialProxy003
+    -SelectFirstIfNonZero_IMaterialProxy003
+    -WrapMinMax_IMaterialProxy003
+    -LessOrEqual_IMaterialProxy003
+    -Empty_IMaterialProxy003
+    -Abs_IMaterialProxy003
+    -Exponential_IMaterialProxy003
+    -GaussianNoise_IMaterialProxy003
+    -UniformNoise_IMaterialProxy003
+    -LinearRamp_IMaterialProxy003
+    -Int_IMaterialProxy003
+    -Frac_IMaterialProxy003
+    -Equals_IMaterialProxy003
+    -Sine_IMaterialProxy003
+    -Clamp_IMaterialProxy003
+    -Divide_IMaterialProxy003
+    -Multiply_IMaterialProxy003
+    -Subtract_IMaterialProxy003
+    -Add_IMaterialProxy003
+    -lamphalo_IMaterialProxy003
+    -lampbeam_IMaterialProxy003
+    -IsNPC_IMaterialProxy003
+    -Ep1IntroVortRefract_IMaterialProxy003
+    -EntityOriginAlyx_IMaterialProxy003
+    -EntityOrigin_IMaterialProxy003
+    -IEffects001
+    -Dummy_IMaterialProxy003
+    -ShadowModel_IMaterialProxy003
+    -Shadow_IMaterialProxy003
+    -ClientLeafSystem002
+    -VClientEntityList003
+    -ClientVirtualReality001
+    -VClient017
+    -VClientDllSharedAppSystems001
+    -GameClientExports001
+    -Camo_IMaterialProxy003
+    -MaterialModifyAnimated_IMaterialProxy003
+    -MaterialModify_IMaterialProxy003
+    -ConveyorScroll_IMaterialProxy003
+    -BreakableSurface_IMaterialProxy003
+    -AnimateSpecificTexture_IMaterialProxy003
+    -AnimatedTexture_IMaterialProxy003
+    -AnimatedOffsetTexture_IMaterialProxy003
+    -AnimatedEntityTexture_IMaterialProxy003
+    -Alpha_IMaterialProxy003
+    -accumbuff4sample_IMaterialProxy003
+    -ClientReplay001
+
+
+MODULE: soundemittersystem.dll
+    -VSoundEmitter002
+
+
+MODULE: replay.dll
+    -ReplaySystem001
+
+
+MODULE: ServerBrowser.dll
+    -VGuiModuleServerBrowser001
+    -ServerBrowser005
+
+
+MODULE: GameUI.dll
+    -VGuiModuleLoader003
+    -RunGameEngine005
+    -GameUI011
+    -GameConsole004
+
+

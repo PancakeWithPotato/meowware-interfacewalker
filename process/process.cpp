@@ -1,6 +1,6 @@
 #include "process.hpp"
 #include <TlHelp32.h>
-#include "log.hpp"
+#include "../log/log.hpp"
 #include <filesystem>
 
 #ifdef x86
@@ -25,17 +25,17 @@
 
 // Not the opcode for call; if this is the "decide" byte of the function tho, CreateInterfaceInternal wasn't inlined
 #define CALL_BYTE 0x5D
-constexpr int PointerSize = sizeof(void*);
-constexpr int RvaSize = sizeof(DWORD);
+constexpr uint8_t PointerSize = sizeof(void*);
+constexpr uint8_t RvaSize = sizeof(DWORD);
 
 Process::Process(const char* procName)
 	: name(procName)
 {
 	std::filesystem::create_directory("logs");
 
-	strcpy_s(fileName.data(), fileName.size(), "logs//");
-	strcat_s(fileName.data(), fileName.size(), procName);
-	strcat_s(fileName.data(), fileName.size(), "_log.txt");
+	fileName = std::string("logs//");
+	fileName.append(procName);
+	fileName += "_log.txt";
 
 	dumpFile.open(fileName.data());
 	if (!dumpFile.is_open())
@@ -50,7 +50,7 @@ Process::Process(const char* procName)
 #ifdef AUTO_BROWSE_MODULES
 	PopulateModules();
 	BrowseEAT();
-#endif
+#endif // AUTO_BROWSE_MODULES
 }
 
 DWORD Process::GetProcessID() {
@@ -104,7 +104,7 @@ void Process::PopulateModules() {
 		if (!strcmp(me.szModule, "crashhandler.dll"))
 			continue;
 
-		modules[me.szModule] = reinterpret_cast<uintptr_t>(me.hModule);
+		modules.emplace(std::make_pair(me.szModule, reinterpret_cast<uintptr_t>(me.hModule)));
 	}
 
 
@@ -114,31 +114,31 @@ void Process::PopulateModules() {
 }
 
 void Process::BrowseEAT() {
-	for (auto& [moduleName, moduleAddress] : modules) {
-		auto dHeader = Read<IMAGE_DOS_HEADER>(moduleAddress);
-		auto ntHeader = Read<IMAGE_NT_HEADERS>(moduleAddress + dHeader.e_lfanew);
+	for (const auto& [moduleName, moduleAddress] : modules) {
+		const auto dHeader = Read<IMAGE_DOS_HEADER>(moduleAddress);
+		const auto ntHeader = Read<IMAGE_NT_HEADERS>(moduleAddress + dHeader.e_lfanew);
 
 		if (ntHeader.Signature != IMAGE_NT_SIGNATURE)
 			continue;
 
 		OPTIONAL_HEADER optionalHeader = ntHeader.OptionalHeader;
 
-		IMAGE_EXPORT_DIRECTORY exportDirectory = Read<IMAGE_EXPORT_DIRECTORY>(moduleAddress + optionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
+		const IMAGE_EXPORT_DIRECTORY exportDirectory = Read<IMAGE_EXPORT_DIRECTORY>(moduleAddress + optionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
 		LOG(WARNING, "Module %s has %d exports", moduleName.data(), exportDirectory.NumberOfNames);
-		uintptr_t namesTable = moduleAddress + exportDirectory.AddressOfNames;
-		uintptr_t functionsTable = moduleAddress + exportDirectory.AddressOfFunctions;
-		uintptr_t ordinalsTable = moduleAddress + exportDirectory.AddressOfNameOrdinals;
+		const uintptr_t namesTable = moduleAddress + exportDirectory.AddressOfNames;
+		const uintptr_t functionsTable = moduleAddress + exportDirectory.AddressOfFunctions;
+		const uintptr_t ordinalsTable = moduleAddress + exportDirectory.AddressOfNameOrdinals;
 
 		for (int i = 0; i < exportDirectory.NumberOfNames; i++) {
-			auto nameRva = Read<DWORD>(namesTable + i * RvaSize);
+			const auto nameRva = Read<DWORD>(namesTable + i * RvaSize);
 
 			std::array<char, 125> exportName;
 			ReadString(moduleAddress + nameRva, exportName.data(), exportName.size());
 
 			// Technically the "proper" way to do it, works flawlessly without this tho, and just adding i * RvaSize but oh well
-			auto ordinal = Read<uint16_t>(ordinalsTable + i * sizeof(uint16_t));
+			const auto ordinal = Read<uint16_t>(ordinalsTable + i * sizeof(uint16_t));
 
-			auto exportAddress = Read<DWORD>(functionsTable + ordinal * RvaSize);
+			const auto exportAddress = Read<DWORD>(functionsTable + ordinal * RvaSize);
 
 			exports[moduleName][exportName.data()] = exportAddress;
 		}
@@ -149,14 +149,17 @@ void Process::BrowseEAT() {
 }
 
 uintptr_t Process::GetExport(const std::string& module, const std::string& exportName) {
-	if (!exports[module].contains(exportName))
+	if (!exports.contains(module))
 		return 0;
 
-	return exports[module].at(exportName);
+	if (!exports.at(module).contains(exportName))
+		return 0;
+
+	return exports.at(module).at(exportName);
 }
 
 InterfaceReg Process::GetInterfaceList(const std::string& moduleName) {
-	uintptr_t moduleAddress = modules[moduleName];
+	const uintptr_t moduleAddress = modules[moduleName];
 	if (!moduleAddress)
 		return InterfaceReg();
 
@@ -168,27 +171,27 @@ InterfaceReg Process::GetInterfaceList(const std::string& moduleName) {
 
 	createInterface += moduleAddress; // Get the VA
 
-	char decideByte = Read<char>(createInterface + DECIDE_BYTE);
+	const char decideByte = Read<char>(createInterface + DECIDE_BYTE);
 	if (decideByte != CALL_BYTE) {
 		// Inlined CreateInterfaceInternal
 		LOG(INFO, "%s inlines CreateInterfaceInternal!", moduleName.data());
 		// I lowkey hate this part :sob:
 #ifdef x86
-		uintptr_t interfaceRegistryAddress = Read<uintptr_t>(Read<uintptr_t>(createInterface + REGISTRY_ADDRESS_INLINE));
+		const uintptr_t interfaceRegistryAddress = Read<uintptr_t>(Read<uintptr_t>(createInterface + REGISTRY_ADDRESS_INLINE));
 		return InterfaceReg(Read<uintptr_t>(interfaceRegistryAddress), Read<uintptr_t>(interfaceRegistryAddress + PointerSize),
 			Read<uintptr_t>(interfaceRegistryAddress + 2 * PointerSize));
 #else
-		DWORD interfaceRegistryRva = Read<DWORD>(createInterface + REGISTRY_ADDRESS_INLINE);
-		uintptr_t interfaceRegistryAddress = Read<uintptr_t>(createInterface + 7 + interfaceRegistryRva);
+		const DWORD interfaceRegistryRva = Read<DWORD>(createInterface + REGISTRY_ADDRESS_INLINE);
+		const uintptr_t interfaceRegistryAddress = Read<uintptr_t>(createInterface + 7 + interfaceRegistryRva);
 		return InterfaceReg(Read<uintptr_t>(interfaceRegistryAddress), Read<uintptr_t>(interfaceRegistryAddress + PointerSize),
 			Read<uintptr_t>(interfaceRegistryAddress + 2 * PointerSize));
 #endif
 	}
 
 	// Call to CreateInterfaceInternal is not inlined
-	uintptr_t internalRva = Read<DWORD>(createInterface + INTERNAL_CALL_RVA);
-	uintptr_t internalAddress = createInterface + OPCODE_AND_INTERNAL_CALL_RVA + internalRva;
-	uintptr_t interfaceRegistryAddress = Read<uintptr_t>(Read<uintptr_t>(internalAddress + REGISTRY_ADDRESS));
+	const uintptr_t internalRva = Read<DWORD>(createInterface + INTERNAL_CALL_RVA);
+	const uintptr_t internalAddress = createInterface + OPCODE_AND_INTERNAL_CALL_RVA + internalRva;
+	const uintptr_t interfaceRegistryAddress = Read<uintptr_t>(Read<uintptr_t>(internalAddress + REGISTRY_ADDRESS));
 
 	if (!interfaceRegistryAddress)
 		return InterfaceReg();

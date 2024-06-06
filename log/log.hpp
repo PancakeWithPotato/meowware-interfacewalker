@@ -5,7 +5,7 @@
 #undef ERROR
 #endif // ERROR
 
-enum LEVEL {
+enum LEVEL : uint8_t {
 	INFO,
 	ERROR,
 	WARNING,

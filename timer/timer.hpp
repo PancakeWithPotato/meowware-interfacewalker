@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <print>
 
 struct Timer {
 	Timer(const char* name)
@@ -11,7 +12,7 @@ struct Timer {
 		auto end = std::chrono::high_resolution_clock::now();
 
 		std::chrono::duration<float> duration = end - start;
-		printf("[%s] Operation took %.2f seconds! \n", name, duration.count());
+		std::println("[{}] Operation took {:.2f} seconds! \n", name, duration.count());
 	}
 
 private:

@@ -1,8 +1,8 @@
-#include "log.hpp"
-#include "process.hpp"
-#include "timer.hpp"
+#include "log/log.hpp"
+#include "process/process.hpp"
+#include "timer/timer.hpp"
 
-static void EnableVirtualTerminalProcessing() {
+inline void EnableVirtualTerminalProcessing() {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	DWORD mode = 0;
@@ -13,7 +13,6 @@ static void EnableVirtualTerminalProcessing() {
 }
 
 int main(int argc, char** argv) {
-	// Enable virtual terminal processing!
 	EnableVirtualTerminalProcessing();
 
 	LOG(INFO, "Interface dumper/logger by Pancake!");
@@ -29,16 +28,19 @@ int main(int argc, char** argv) {
 
 	LOG(INFO, "Selected process: %s", processName.data());
 
-	Process process(processName.data());
-	if (!process.IsHandleOpen())
-		return 1;
+	{
+		Timer timer("Interface Walking");
+		Process process(processName.data());
+		if (!process.IsHandleOpen())
+			return 1;
 
-	process.WalkInterfaces();
+		process.WalkInterfaces();
 
-	LOG(SUCCES, "Finished interface walking!");
-	LOG(INFO, "Written %d interfaces to %s!", process.GetWrittenInterfaceCount(), std::string("logs/" + processName + "_log.txt").data());
+		LOG(SUCCES, "Finished interface walking!");
+		LOG(INFO, "Written %d interfaces to %s!", process.GetWrittenInterfaceCount(), std::string("logs/" + processName + "_log.txt").data());
 
-	process.CloseLogFile();
+		process.CloseLogFile();
+	}
 
 	std::cout << "Press ENTER to exit..\n";
 	std::cin.get();

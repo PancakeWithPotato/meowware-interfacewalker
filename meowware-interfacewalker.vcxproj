@@ -152,13 +152,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="process.cpp" />
+    <ClCompile Include="process\process.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="interfacelist.hpp" />
-    <ClInclude Include="log.hpp" />
-    <ClInclude Include="process.hpp" />
-    <ClInclude Include="timer.hpp" />
+    <ClInclude Include="interfacelist\interfacelist.hpp" />
+    <ClInclude Include="log\log.hpp" />
+    <ClInclude Include="process\process.hpp" />
+    <ClInclude Include="timer\timer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

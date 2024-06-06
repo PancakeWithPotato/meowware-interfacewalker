@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <unordered_map>
 #include <string>
-#include "interfacelist.hpp"
+#include "../interfacelist/interfacelist.hpp"
 #include <fstream>
 #include <array>
 
@@ -17,7 +17,7 @@ public:
 	DWORD GetProcessID();
 	bool OpenHandle();
 
-	bool IsHandleOpen() const { return handle; };
+	bool IsHandleOpen() const noexcept { return handle; };
 
 	void PopulateModules();
 	std::unordered_map<std::string, uintptr_t>& GetModules() { return modules; };
@@ -48,10 +48,9 @@ private:
 	DWORD id = 0;
 	int interfaceCount = 0;
 	std::ofstream dumpFile;
-	std::array<char, 128> fileName;
+	std::string fileName;
 
 	std::unordered_map<std::string, uintptr_t> modules;
-	//				   module								export			  addr
 	std::unordered_map<std::string, std::unordered_map<std::string, uintptr_t>> exports;
 };
 

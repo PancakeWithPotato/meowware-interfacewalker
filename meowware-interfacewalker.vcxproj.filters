@@ -18,21 +18,21 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="process.cpp">
+    <ClCompile Include="process\process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="process.hpp">
+    <ClInclude Include="process\process.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="log.hpp">
+    <ClInclude Include="log\log.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="interfacelist.hpp">
+    <ClInclude Include="interfacelist\interfacelist.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="timer.hpp">
+    <ClInclude Include="timer\timer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

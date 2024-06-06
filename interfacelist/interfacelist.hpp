@@ -5,7 +5,7 @@ struct InterfaceReg {
 	InterfaceReg(uintptr_t createFn, uintptr_t name, uintptr_t next)
 		: createFN(createFn), name(name), next(next) {}
 
-	uintptr_t createFN;
-	uintptr_t name;
-	uintptr_t next;
+	uintptr_t createFN{};
+	uintptr_t name{};
+	uintptr_t next{};
 };
