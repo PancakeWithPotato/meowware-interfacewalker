@@ -2,6 +2,7 @@
 #include <TlHelp32.h>
 #include "../log/log.hpp"
 #include <filesystem>
+#include <ranges>
 
 #ifdef x86
 #define OPTIONAL_HEADER IMAGE_OPTIONAL_HEADER32
@@ -28,7 +29,7 @@
 constexpr uint8_t PointerSize = sizeof(void*);
 constexpr uint8_t RvaSize = sizeof(DWORD);
 
-Process::Process(const char* procName)
+Process::Process(std::string_view procName)
 	: name(procName)
 {
 	std::filesystem::create_directory("logs");
@@ -37,14 +38,16 @@ Process::Process(const char* procName)
 	fileName.append(procName);
 	fileName += "_log.txt";
 
-	dumpFile.open(fileName.data());
+	dumpFile.open(fileName);
 	if (!dumpFile.is_open())
 		LOG(ERROR, "Failed to open log file!");
 
 #ifdef AUTO_OPEN_PROC
 	GetProcessID();
-	if (!OpenHandle())
+	if (!OpenHandle()) {
 		LOG(ERROR, "Failed to open handle to process %s!", procName);
+		return;
+	}
 #endif // AUTO_OPEN_PROC
 
 #ifdef AUTO_BROWSE_MODULES
@@ -53,31 +56,30 @@ Process::Process(const char* procName)
 #endif // AUTO_BROWSE_MODULES
 }
 
-DWORD Process::GetProcessID() {
+void Process::GetProcessID() {
 	if (id)
-		return id;
+		return;
 
 	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if (!snapshot) {
 		LOG(ERROR, "Failed to open snapshot handle!");
-		return 0;
+		return;
 	}
 
 	PROCESSENTRY32 pe{ .dwSize = sizeof(PROCESSENTRY32) };
 	if (!Process32First(snapshot, &pe)) {
 		LOG(ERROR, "Failed to parse the snapshot!");
-		return 0;
+		return;
 	}
 
 	while (Process32Next(snapshot, &pe)) {
-		if (!_stricmp(pe.szExeFile, name)) {
+		if (std::ranges::equal(name, std::string_view(pe.szExeFile), [](unsigned char lhs, unsigned char rhs) { return std::tolower(lhs) == std::tolower(rhs); })) {
 			LOG(SUCCES, "Found %s, id: %d", name, pe.th32ProcessID);
 			id = pe.th32ProcessID;
-			return id;
+			return;
 		}
 	}
 
-	return 0;
 }
 
 bool Process::OpenHandle() {
@@ -140,7 +142,8 @@ void Process::BrowseEAT() {
 
 			const auto exportAddress = Read<DWORD>(functionsTable + ordinal * RvaSize);
 
-			exports[moduleName][exportName.data()] = exportAddress;
+			exports[moduleName].emplace(std::make_pair(exportName.data(), exportAddress));
+			//exports.emplace(moduleName, std::make_pair(exportName.data(), exportAddress));
 		}
 
 	}

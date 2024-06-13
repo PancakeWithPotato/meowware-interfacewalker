@@ -12,15 +12,15 @@
 class Process {
 public:
 	Process() = default;
-	Process(const char* procName);
+	Process(std::string_view procName);
 
-	DWORD GetProcessID();
+	void GetProcessID();
 	bool OpenHandle();
 
 	bool IsHandleOpen() const noexcept { return handle; };
 
 	void PopulateModules();
-	std::unordered_map<std::string, uintptr_t>& GetModules() { return modules; };
+	std::unordered_map<std::string, uintptr_t>& GetModules() noexcept { return modules; };
 
 	void BrowseEAT();
 	uintptr_t GetExport(const std::string& moduleName, const std::string& exportName);
@@ -31,6 +31,8 @@ public:
 
 	void WalkInterfaceRegistry(const char* moduleName, const InterfaceReg* const reg);
 
+	std::string GetFilename() const { return fileName; };
+
 	template <typename T>
 	const T Read(uintptr_t address);
 
@@ -39,19 +41,19 @@ public:
 
 	bool ReadString(uintptr_t address, char* buffer, int size);
 
-	const int GetWrittenInterfaceCount() const { return interfaceCount; };
+	const size_t GetWrittenInterfaceCount() const { return interfaceCount; };
 
 	void CloseLogFile() { dumpFile.close(); };
 private:
-	HANDLE handle = nullptr;
-	const char* name;
-	DWORD id = 0;
-	int interfaceCount = 0;
-	std::ofstream dumpFile;
-	std::string fileName;
+	HANDLE handle{};
+	std::string_view name{};
+	DWORD id{};
+	size_t interfaceCount{};
+	std::ofstream dumpFile{};
+	std::string fileName{};
 
-	std::unordered_map<std::string, uintptr_t> modules;
-	std::unordered_map<std::string, std::unordered_map<std::string, uintptr_t>> exports;
+	std::unordered_map<std::string, uintptr_t> modules{};
+	std::unordered_map<std::string, std::unordered_map<std::string, uintptr_t>> exports{};
 };
 
 template<typename T>
