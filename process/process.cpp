@@ -106,7 +106,7 @@ void Process::PopulateModules() {
 		if (!strcmp(me.szModule, "crashhandler.dll"))
 			continue;
 
-		modules.emplace(std::make_pair(me.szModule, reinterpret_cast<uintptr_t>(me.hModule)));
+		modules.emplace(me.szModule, reinterpret_cast<uintptr_t>(me.hModule));
 	}
 
 
@@ -131,7 +131,7 @@ void Process::BrowseEAT() {
 		const uintptr_t functionsTable = moduleAddress + exportDirectory.AddressOfFunctions;
 		const uintptr_t ordinalsTable = moduleAddress + exportDirectory.AddressOfNameOrdinals;
 
-		for (int i = 0; i < exportDirectory.NumberOfNames; i++) {
+		for (unsigned int i = 0; i < exportDirectory.NumberOfNames; i++) {
 			const auto nameRva = Read<DWORD>(namesTable + i * RvaSize);
 
 			std::array<char, 125> exportName;
@@ -142,8 +142,7 @@ void Process::BrowseEAT() {
 
 			const auto exportAddress = Read<DWORD>(functionsTable + ordinal * RvaSize);
 
-			exports[moduleName].emplace(std::make_pair(exportName.data(), exportAddress));
-			//exports.emplace(moduleName, std::make_pair(exportName.data(), exportAddress));
+			exports[moduleName].emplace(exportName.data(), exportAddress);
 		}
 
 	}

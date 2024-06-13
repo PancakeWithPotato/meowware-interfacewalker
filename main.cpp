@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 
 	{
 		Timer timer("Interface Walking");
-		Process process(processName.data());
+		Process process(processName);
 		if (!process.IsHandleOpen())
 			return 1;
 
