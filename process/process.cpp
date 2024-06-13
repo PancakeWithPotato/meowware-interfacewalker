@@ -3,6 +3,7 @@
 #include "../log/log.hpp"
 #include <filesystem>
 #include <ranges>
+#include <print>
 
 #ifdef x86
 #define OPTIONAL_HEADER IMAGE_OPTIONAL_HEADER32
@@ -11,21 +12,21 @@
 #endif
 
 #ifdef x86
-#define DECIDE_BYTE 3
-#define REGISTRY_ADDRESS_INLINE 6
-#define REGISTRY_ADDRESS 6
-#define INTERNAL_CALL_RVA 5
-#define OPCODE_AND_INTERNAL_CALL_RVA 9
+constexpr uint8_t DECIDE_BYTE = 3;
+constexpr uint8_t REGISTRY_ADDRESS_INLINE = 6;
+constexpr uint8_t REGISTRY_ADDRESS = 6;
+constexpr uint8_t INTERNAL_CALL_RVA = 5;
+constexpr uint8_t OPCODE_AND_INTERNAL_CALL_RVA = 9;
 #else // Tell me about a game that does NOT inline CreateInterfaceInternal on 64 bit
-#define DECIDE_BYTE 1 // not checked
-#define REGISTRY_ADDRESS_INLINE 3
-#define REGISTRY_ADDRESS 6 // not checked
-#define INTERNAL_CALL_RVA 5 // not checked
-#define OPCODE_AND_INTERNAL_CALL_RVA 9 // not checked
+constexpr uint8_t DECIDE_BYTE = 1;
+constexpr uint8_t REGISTRY_ADDRESS_INLINE = 3;
+constexpr uint8_t REGISTRY_ADDRESS = 6;
+constexpr uint8_t INTERNAL_CALL_RVA = 5;
+constexpr uint8_t OPCODE_AND_INTERNAL_CALL_RVA = 9;
 #endif
 
 // Not the opcode for call; if this is the "decide" byte of the function tho, CreateInterfaceInternal wasn't inlined
-#define CALL_BYTE 0x5D
+constexpr uint8_t CALL_BYTE = 0x5D;
 constexpr uint8_t PointerSize = sizeof(void*);
 constexpr uint8_t RvaSize = sizeof(DWORD);
 
@@ -45,7 +46,7 @@ Process::Process(std::string_view procName)
 #ifdef AUTO_OPEN_PROC
 	GetProcessID();
 	if (!OpenHandle()) {
-		LOG(ERROR, "Failed to open handle to process %s!", procName);
+		LOG(ERROR, "Failed to open handle to process {}!", procName);
 		return;
 	}
 #endif // AUTO_OPEN_PROC
@@ -74,7 +75,7 @@ void Process::GetProcessID() {
 
 	while (Process32Next(snapshot, &pe)) {
 		if (std::ranges::equal(name, std::string_view(pe.szExeFile), [](unsigned char lhs, unsigned char rhs) { return std::tolower(lhs) == std::tolower(rhs); })) {
-			LOG(SUCCES, "Found %s, id: %d", name, pe.th32ProcessID);
+			LOG(SUCCES, "Found {}, id: {}", name, static_cast<int>(pe.th32ProcessID));
 			id = pe.th32ProcessID;
 			return;
 		}
@@ -112,7 +113,7 @@ void Process::PopulateModules() {
 
 
 	if (modules.empty())
-		LOG(ERROR, "Failed to grab modules for %s process!", name);
+		LOG(ERROR, "Failed to grab modules for {} process!", name);
 }
 
 void Process::BrowseEAT() {
@@ -126,7 +127,7 @@ void Process::BrowseEAT() {
 		OPTIONAL_HEADER optionalHeader = ntHeader.OptionalHeader;
 
 		const IMAGE_EXPORT_DIRECTORY exportDirectory = Read<IMAGE_EXPORT_DIRECTORY>(moduleAddress + optionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
-		LOG(WARNING, "Module %s has %d exports", moduleName.data(), exportDirectory.NumberOfNames);
+		LOG(WARNING, "Module {} has {} exports", moduleName.data(), exportDirectory.NumberOfNames);
 		const uintptr_t namesTable = moduleAddress + exportDirectory.AddressOfNames;
 		const uintptr_t functionsTable = moduleAddress + exportDirectory.AddressOfFunctions;
 		const uintptr_t ordinalsTable = moduleAddress + exportDirectory.AddressOfNameOrdinals;
@@ -167,7 +168,7 @@ InterfaceReg Process::GetInterfaceList(const std::string& moduleName) {
 
 	uintptr_t createInterface = GetExport(moduleName, "CreateInterface");
 	if (!createInterface) {
-		LOG(WARNING, "Module %s doesn't export CreateInterface!", moduleName.data());
+		LOG(WARNING, "Module {} doesn't export CreateInterface!", moduleName.data());
 		return InterfaceReg();
 	}
 
@@ -176,7 +177,7 @@ InterfaceReg Process::GetInterfaceList(const std::string& moduleName) {
 	const char decideByte = Read<char>(createInterface + DECIDE_BYTE);
 	if (decideByte != CALL_BYTE) {
 		// Inlined CreateInterfaceInternal
-		LOG(INFO, "%s inlines CreateInterfaceInternal!", moduleName.data());
+		LOG(INFO, "{} inlines CreateInterfaceInternal!", moduleName.data());
 		// I lowkey hate this part :sob:
 #ifdef x86
 		const uintptr_t interfaceRegistryAddress = Read<uintptr_t>(Read<uintptr_t>(createInterface + REGISTRY_ADDRESS_INLINE));
@@ -221,7 +222,7 @@ void Process::WalkInterfaceRegistry(const char* moduleName, const InterfaceReg* 
 		std::array<char, 125> interfaceName;
 		ReadString(current.name, interfaceName.data(), interfaceName.size());
 
-		LOG(SUCCES, "[%s] Interface Name: %s, next interface: 0x%X", moduleName, interfaceName.data(), current.next);
+		LOG(SUCCES, "[{}] Interface Name: {}, next interface: 0x{:X}", moduleName, interfaceName.data(), current.next);
 
 		interfaceCount++;
 		dumpFile << "    -" << interfaceName.data() << '\n';

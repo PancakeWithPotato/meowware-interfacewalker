@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <cstdarg>
+#include <print>
+#include <string_view>
 #ifdef ERROR
 #undef ERROR
 #endif // ERROR
@@ -13,7 +15,7 @@ enum LEVEL : uint8_t {
 };
 
 namespace logger {
-	__forceinline void LogMessage(LEVEL level, const char* format, ...) {
+	__forceinline void LogMessage(LEVEL level, std::string_view format, auto&& ...args) {
 		switch (level) {
 		case LEVEL::INFO:
 			printf("\033[36m[*]> ");
@@ -29,11 +31,7 @@ namespace logger {
 			break;
 		}
 
-		va_list args;
-		va_start(args, format);
-		vprintf(format, args);
-		va_end(args);
-		printf("\033[0m\n");
+		std::cout << std::vformat(format, std::make_format_args(args...)) << "\033[0m\n";
 	}
 }
 

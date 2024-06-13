@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 	else
 		processName = argv[1];
 
-	LOG(INFO, "Selected process: %s", processName.data());
+	LOG(INFO, "Selected process: {}", processName.data());
 
 	{
 		Timer timer("Interface Walking");
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 		process.WalkInterfaces();
 
 		LOG(SUCCES, "Finished interface walking!");
-		LOG(INFO, "Written %d interfaces to %s!", process.GetWrittenInterfaceCount(), process.GetFilename().data());
+		LOG(INFO, "Written {} interfaces to {}!", process.GetWrittenInterfaceCount(), process.GetFilename().data());
 	}
 
 	std::cout << "Press ENTER to exit..\n";
